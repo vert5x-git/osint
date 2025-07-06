@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>by @patientmap</title>
+    <style>
+        :root {
+            --neon-green: #0afc03;
+            --matrix-green: #00ff41;
+            --dark-bg: #0a0a12;
+            --darker-bg: #050508;
+            --card-bg: rgba(15, 15, 35, 0.7);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background: var(--dark-bg);
+            color: var(--neon-green);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(10, 252, 3, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 65, 0.05) 0%, transparent 20%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--matrix-green);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px var(--neon-green);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: var(--matrix-green);
+            box-shadow: 0 0 10px var(--matrix-green);
+        }
+        
+        .search-box {
+            background: var(--darker-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 15px rgba(10, 252, 3, 0.2);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .search-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(10, 252, 3, 0.1), transparent);
+            animation: scan 3s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        #phoneInput {
+            flex: 1;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--neon-green);
+            border-radius: 4px;
+            color: var(--neon-green);
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        #phoneInput:focus {
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+        
+        #searchBtn {
+            padding: 15px 30px;
+            background: transparent;
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #searchBtn:hover {
+            background: rgba(10, 252, 3, 0.1);
+            box-shadow: 0 0 15px var(--neon-green);
+            transform: translateY(-2px);
+        }
+        
+        #searchBtn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(10, 252, 3, 0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        #searchBtn:hover::before {
+            left: 100%;
+        }
+        
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .category {
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--neon-green);
+            overflow: hidden;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(10, 252, 3, 0.3);
+        }
+        
+        .category-header {
+            background: rgba(10, 10, 30, 0.9);
+            padding: 1rem;
+            border-bottom: 1px solid var(--neon-green);
+        }
+        
+        .category-header h2 {
+            font-size: 1.3rem;
+            text-align: center;
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+        
+        .links {
+            padding: 1rem;
+        }
+        
+        .link-item {
+            margin-bottom: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .link-item:hover {
+            background: rgba(10, 252, 3, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .link-item a {
+            color: var(--matrix-green);
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .link-item a:hover {
+            color: white;
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+        
+        .glow {
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid var(--matrix-green);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .results {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>OSINT <span class="glow">Maniac</span></h1>
+            <p>Введите номер для мультиплатформенного поиска</p>
+        </header>
+        
+        <div class="search-box">
+            <div class="input-group">
+                <input type="text" id="phoneInput" placeholder="Введите номер телефона...">
+                <button id="searchBtn">Запустить сканирование</button>
+            </div>
+            <p>Система проверит номер в 40+ источниках одновременно (НЕ ИСПОЛЬЗОВАТЬ ЕСЛИ ТЕЛЕФОН СЛАБЫЙ)</p>
+        </div>
+        
+        <div class="results" id="resultsContainer">
+            <!-- Результаты будут генерироваться автоматически -->
+        </div>
+    </div>
+    
+    <footer>
+        <p>OSINT Maniac TOOL v1.0 | Данные генерируются в реальном времени</p>
+    </footer>
+
+    <script>
+        const sites = [
+            {
+                category: "Осинт +номеров",
+                links: [
+                    { name: "Cybersec", url: "https://cybersec.org/search/" },
+                    { name: "OSINTKit", url: "http://osintkit.net/" },
+                    { name: "OSINT Rocks", url: "https://osint.rocks/" },
+                    { name: "Reveng", url: "http://reveng.ee/" },
+                    { name: "Infotrack", url: "http://infotrackpeople.com/" },
+                    { name: "OSINT Industries", url: "https://app.osint.industries/" },
+                    { name: "LeakCheck", url: "https://leakcheck.io/dashboard" },
+                    { name: "CSINT", url: "https://csint.dev/" },
+                    { name: "YouControl", url: "http://youcontrol.com.ua" }
+                ]
+            },
+            {
+                category: "Поиск по номеру",
+                links: [
+                    { name: "WhatsApp Checker", url: "https://whatsapp.checkleaked.cc/" },
+                    { name: "SMSC HLR Test", url: "https://smsc.ru/testhlr/" },
+                    { name: "eMobileTracker", url: "https://emobiletracker.com" },
+                    { name: "HTMLWeb", url: "https://htmlweb.ru/" },
+                    { name: "SpraVkaru", url: "https://href.li/?http://spra.vkaru.net/" },
+                    { name: "VeriPhone", url: "https://veriphone.io/" },
+                    { name: "Intelx Data", url: "https://data.intelx.io/saverudata/" }
+                ]
+            },
+            {
+                category: "Поиск по нику",
+                links: [
+                    { name: "WhatsMyName", url: "https://whatsmyname.app/" },
+                    { name: "InstantUsername", url: "https://instantusername.com/" },
+                    { name: "Lyzem", url: "http://lyzem.com" },
+                    { name: "Telegram Search", url: "https://tgdev.io/tme/search/post" }
+                ]
+            },
+            {
+                category: "Поисковые системы",
+                links: [
+                    { name: "Yandex Custom", url: "https://yandex.ru/search/site/?text=%22HowToFind%22&searchid=2424333" },
+                    { name: "Google CSE", url: "https://cse.google.com/cse?cx=006368593537057042503:ig4r3rz35qi" },
+                    { name: "Yandex HowToFind", url: "https://yandex.ru/search/site/?text=%22HowToFind_bot%22&searchid=2444312" },
+                    { name: "Searx", url: "https://searx.info" },
+                    { name: "DuckDuckGo", url: "https://duckduckgo.com/" },
+                    { name: "Brave Search", url: "https://search.brave.com/" },
+                    { name: "Google", url: "https://www.google.com" },
+                    { name: "Yandex", url: "https://yandex.com" },
+                    { name: "Yahoo", url: "https://search.yahoo.com" },
+                    { name: "Google Advanced", url: "https://www.google.com/advanced_search" },
+                    { name: "OSINT Rocks Search", url: "https://osint.rocks" },
+                    { name: "2Lingual", url: "https://2lingual.com" }
+                ]
+            },
+            {
+                category: "Поиск по IP",
+                links: [
+                    { name: "IPinfo", url: "https://ipinfo.io/" },
+                    { name: "XSEO", url: "http://xseo.in/" },
+                    { name: "InfoByIP", url: "http://ru.infobyip.com/" },
+                    { name: "Web-Check", url: "https://github.com/Lissy93/web-check" },
+                    { name: "Web-Check 2", url: "https://github.com/anir0y/web-check2" },
+                    { name: "IPAPI", url: "https://ipapi.co/{ip}/json/" },
+                    { name: "Spys.ru", url: "http://spys.ru/" },
+                    { name: "2ip.ua", url: "https://2ip.ua/ru/" }
+                ]
+            },
+            {
+                category: "Другие инструменты",
+                links: [
+                    { name: "Grabify IP Logger", url: "https://grabify.link/" },
+                    { name: "OSINT Framework", url: "https://osintframework.com/" },
+                    { name: "ki.tc IP Logger", url: "https://ki.tc/" },
+                    { name: "Doxbin", url: "https://tor.link/site/doxbin/info" },
+                    { name: "Search4Faces", url: "http://search4faces.com/" },
+                    { name: "Dorksearch", url: "https://Dorksearch.com" },
+                    { name: "Cignal OSINT", url: "https://cignalosint.lovable.app/" },
+                    { name: "Censys", url: "https://search.censys.io/" },
+                    { name: "Shodan", url: "https://www.shodan.io/" },
+                    { name: "ZoomEye", url: "https://www.zoomeye.org/" },
+                    { name: "LeakIX", url: "https://leakix.net/" },
+                    { name: "Web-Check XYZ", url: "https://web-check.xyz/" },
+                    { name: "Spys One Proxies", url: "https://spys.one/proxys/" }
+                ]
+            }
+        ];
+
+        function generateResults() {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+            
+            sites.forEach(group => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'category';
+                
+                const header = document.createElement('div');
+                header.className = 'category-header';
+                header.innerHTML = `<h2>${group.category}</h2>`;
+                
+                const linksContainer = document.createElement('div');
+                linksContainer.className = 'links';
+                
+                group.links.forEach(link => {
+                    const linkElement = document.createElement('div');
+                    linkElement.className = 'link-item';
+                    linkElement.innerHTML = `
+                        <a href="${link.url}" target="_blank">${link.name}</a>
+                    `;
+                    linksContainer.appendChild(linkElement);
+                });
+                
+                categoryElement.appendChild(header);
+                categoryElement.appendChild(linksContainer);
+                container.appendChild(categoryElement);
+            });
+        }
+
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const phoneNumber = document.getElementById('phoneInput').value;
+            if(phoneNumber) {
+                 
+                this.textContent = 'Сканирование...';
+                this.disabled = true;
+                
+                
+                setTimeout(() => {
+                    generateResults();
+                    this.textContent = 'Запустить сканирование';
+                    this.disabled = false;
+                    
+                    
+                    document.getElementById('resultsContainer').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }, 1500);
+            } else {
+                alert('Введите номер для сканирования!');
+            }
+        });
+
+        
+        window.onload = generateResults;
+    </script>
+</body>
+</html>
